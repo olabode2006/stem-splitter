@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile
+from separator import separate
 
 # create the fastapi app instance
 app = FastAPI()
@@ -17,6 +18,13 @@ async def upload(file: UploadFile):
     # open a new file in the uploads folder and write the bytes to it
     with open(f"uploads/{file.filename}", "wb") as f:
         f.write(contents)
+
+    print(f"Starting separation for {file.filename}")
+    output_path = separate(file.filename)
+    print(f"Separation complete: {output_path}")
+
+    #seperate the file into stem using the function made in seperator.py
+    output_path = separate(file.filename)
     
     # return the filename to confirm it was received
-    return {"filename" : file.filename}
+    return {"filename" : file.filename, "output_path" : output_path}
